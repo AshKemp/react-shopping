@@ -27,7 +27,9 @@ const ProductScreen = ({ match }) => {
                 text={`${product.numReviews} reviews`}
               />
             </ListGroup.Item>
-            <ListGroup.Item>Price: {product.price}</ListGroup.Item>
+            <ListGroup.Item>
+              Price: ₹{(product.price * 72.91).toFixed(2)}
+            </ListGroup.Item>
             <ListGroup.Item>Description: {product.description}</ListGroup.Item>
           </ListGroup>
         </Col>
@@ -38,7 +40,7 @@ const ProductScreen = ({ match }) => {
                 <Row>
                   <Col>Price:</Col>
                   <Col>
-                    <strong>{product.price}</strong>
+                    <strong>₹{(product.price * 72.91).toFixed(2)}</strong>
                   </Col>
                 </Row>
               </ListGroup.Item>
