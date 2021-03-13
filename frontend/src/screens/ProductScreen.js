@@ -61,7 +61,7 @@ const ProductScreen = ({ history, match }) => {
                 />
               </ListGroup.Item>
               <ListGroup.Item>
-                Price: ₹{(product.price * 72.91).toFixed(2)}
+                Price: ${product.price.toFixed(2)}
               </ListGroup.Item>
               <ListGroup.Item>
                 Description: {product.description}
@@ -75,7 +75,7 @@ const ProductScreen = ({ history, match }) => {
                   <Row>
                     <Col>Price:</Col>
                     <Col>
-                      <strong>₹{(product.price * 72.91).toFixed(2)}</strong>
+                      <strong>${product.price.toFixed(2)}</strong>
                     </Col>
                   </Row>
                 </ListGroup.Item>
