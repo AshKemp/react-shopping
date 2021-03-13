@@ -1,25 +1,27 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Col, Row, ListGroup, Card, Image } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Message from "../components/Message";
 import CheckoutSteps from "../components/CheckoutSteps";
+import { createOrder } from "../actions/orderActions";
 
-const PlaceOrderScreen = () => {
-  const addDecimals = (num) => {
-    return (Math.round(num * 100) / 100).toFixed(2);
-  };
+const PlaceOrderScreen = ({ history }) => {
+  const dispatch = useDispatch();
+  // const addDecimals = (num) => {
+  //   return (Math.round(num * 100) / 100).toFixed(2);
+  // };
   const cart = useSelector((state) => state.cart);
 
   // Calculate Prices
 
   cart.itemsPrice = cart.cartItems.reduce(
-    (acc, item) => addDecimals((acc + item.price * item.qty) * 72.91),
+    (acc, item) => acc + item.price * item.qty,
     0
   );
 
-  cart.shippingPrice = addDecimals(cart.itemsPrice > 15000 ? 0 : 1500);
-  cart.taxPrice = addDecimals(Number((0.15 * cart.itemsPrice).toFixed(2)));
+  cart.shippingPrice = cart.itemsPrice > 15000 ? 0 : 1500;
+  cart.taxPrice = Number((0.15 * cart.itemsPrice).toFixed(2));
 
   cart.totalPrice = (
     Number(cart.itemsPrice) +
@@ -27,7 +29,26 @@ const PlaceOrderScreen = () => {
     Number(cart.taxPrice)
   ).toFixed(2);
 
+  const orderCreate = useSelector((state) => state.orderCreate);
+  const { order, success, error } = orderCreate;
+  useEffect(() => {
+    if (success) {
+      history.push(`/order/${order._id}`);
+    }
+  }, [history, success]);
+
   const placeOrderHandler = () => {
+    dispatch(
+      createOrder({
+        orderItems: cart.cartItems,
+        shippingAddress: cart.shippingAddress,
+        paymentMethod: cart.paymentMethod,
+        itemsPrice: cart.itemsPrice,
+        shippingPrice: cart.shippingPrice,
+        taxPrice: cart.taxPrice,
+        totalPrice: cart.totalPrice,
+      })
+    );
     console.log("Order");
   };
   return (
@@ -72,8 +93,8 @@ const PlaceOrderScreen = () => {
                           </Link>
                         </Col>
                         <Col md={4}>
-                          {item.qty} x ₹{(item.price * 72.91).toFixed(2)} = ₹
-                          {(item.qty * item.price * 72.91).toFixed(2)}
+                          {item.qty} x ${item.price.toFixed(2)} = $
+                          {(item.qty * item.price).toFixed(2)}
                         </Col>
                       </Row>
                     </ListGroup.Item>
@@ -92,26 +113,29 @@ const PlaceOrderScreen = () => {
               <ListGroup.Item>
                 <Row>
                   <Col>Items</Col>
-                  <Col>₹{cart.itemsPrice}</Col>
+                  <Col>${cart.itemsPrice.toFixed(2)}</Col>
                 </Row>
               </ListGroup.Item>
               <ListGroup.Item>
                 <Row>
                   <Col>Shipping</Col>
-                  <Col>₹{cart.shippingPrice}</Col>
+                  <Col>${cart.shippingPrice}</Col>
                 </Row>
               </ListGroup.Item>
               <ListGroup.Item>
                 <Row>
                   <Col>Tax</Col>
-                  <Col>₹{cart.taxPrice}</Col>
+                  <Col>${cart.taxPrice}</Col>
                 </Row>
               </ListGroup.Item>
               <ListGroup.Item>
                 <Row>
                   <Col>Total Price</Col>
-                  <Col>₹{cart.totalPrice}</Col>
+                  <Col>${cart.totalPrice}</Col>
                 </Row>
+              </ListGroup.Item>
+              <ListGroup.Item>
+                {error && <Message variant="danger">{error}</Message>}
               </ListGroup.Item>
               <ListGroup.Item>
                 <Button
