@@ -10,7 +10,7 @@ import {
   FormControl,
 } from "react-bootstrap";
 import Rating from "../components/Rating";
-// import products from "../products";
+
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { listProductDetails } from "../actions/productActions";
@@ -18,20 +18,14 @@ import Message from "../components/Message";
 import Loader from "../components/Loader";
 
 const ProductScreen = ({ history, match }) => {
-  // const [product, setProduct] = useState({});
   const [qty, setQty] = useState(1);
   const dispatch = useDispatch();
   const productDetails = useSelector((state) => state.productDetails);
   const { loading, error, product } = productDetails;
   useEffect(() => {
-    // const fetchProduct = async () => {
-    //   const { data } = await axios.get(`/api/products/${match.params.id}`);
-    //   setProduct(data);
-    // };
-    // fetchProduct();
     dispatch(listProductDetails(match.params.id));
   }, [dispatch, match]);
-  // const product = products.find((p) => p._id === match.params.id);
+
   const addToCartHandler = () => {
     history.push(`/cart/${match.params.id}?qty=${qty}`);
   };
@@ -60,9 +54,7 @@ const ProductScreen = ({ history, match }) => {
                   text={`${product.numReviews} reviews`}
                 />
               </ListGroup.Item>
-              <ListGroup.Item>
-                Price: ${product.price.toFixed(2)}
-              </ListGroup.Item>
+              <ListGroup.Item>Price: ${product.price}</ListGroup.Item>
               <ListGroup.Item>
                 Description: {product.description}
               </ListGroup.Item>
@@ -75,7 +67,7 @@ const ProductScreen = ({ history, match }) => {
                   <Row>
                     <Col>Price:</Col>
                     <Col>
-                      <strong>${product.price.toFixed(2)}</strong>
+                      <strong>${product.price}</strong>
                     </Col>
                   </Row>
                 </ListGroup.Item>
