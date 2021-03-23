@@ -5,10 +5,11 @@ const {
   registerUser,
   getUserProfile,
   updateUserProfile,
+  getUsers,
 } = require("../controller/userController.js");
-const { protect } = require("../middleware/authMiddleware");
+const { protect, admin } = require("../middleware/authMiddleware");
 
-router.route("/").post(registerUser);
+router.route("/").post(registerUser).get(protect, admin, getUsers);
 router.post("/login", authUser);
 router
   .route("/profile")
