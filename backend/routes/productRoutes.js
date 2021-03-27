@@ -5,7 +5,10 @@ const Product = require("../model/productModel");
 const {
   getProducts,
   getProductById,
+  deleteProduct,
 } = require("../controller/productController.js");
+
+const { protect, admin } = require("../middleware/authMiddleware");
 
 // router.get(
 //   "/",
@@ -17,7 +20,7 @@ const {
 
 router.route("/").get(getProducts);
 
-router.route("/:id").get(getProductById);
+router.route("/:id").get(getProductById).delete(protect, admin, deleteProduct);
 
 // router.get(
 //   "/:id",
