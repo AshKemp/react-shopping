@@ -9,12 +9,17 @@ const { notFound, errorHandler } = require("./middleware/errorMiddleware");
 const orderRoutes = require("./routes/orderRoutes");
 const uploadRoutes = require("./routes/uploadRoutes");
 const path = require("path");
+const morgan = require("morgan");
 
 dotenv.config();
 
 connectDB();
 
 const app = express();
+
+if (process.env.NODE_ENV === "development") {
+  app.use(morgan("dev"));
+}
 
 app.use(express.json());
 
