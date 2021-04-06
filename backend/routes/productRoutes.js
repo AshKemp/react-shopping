@@ -9,6 +9,7 @@ const {
   updateProduct,
   createProduct,
   createProductReview,
+  getTopProducts,
 } = require("../controller/productController.js");
 
 const { protect, admin } = require("../middleware/authMiddleware");
@@ -23,14 +24,8 @@ const { protect, admin } = require("../middleware/authMiddleware");
 
 router.route("/").get(getProducts).post(protect, admin, createProduct);
 
-router
-  .route("/:id")
-  .get(getProductById)
-  .delete(protect, admin, deleteProduct)
-  .put(protect, admin, updateProduct);
-
 router.route("/:id/reviews").post(protect, createProductReview);
-
+router.get("/top", getTopProducts);
 // router.get(
 //   "/:id",
 //   asyncHandler(async (req, res) => {
@@ -43,5 +38,11 @@ router.route("/:id/reviews").post(protect, createProductReview);
 //     }
 //   })
 // );
+
+router
+  .route("/:id")
+  .get(getProductById)
+  .delete(protect, admin, deleteProduct)
+  .put(protect, admin, updateProduct);
 
 module.exports = router;
