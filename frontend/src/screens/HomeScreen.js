@@ -9,6 +9,7 @@ import { listProducts } from "../actions/productActions";
 import Loader from "../components/Loader";
 import Pageinate from "../components/Pageinate";
 import Message from "../components/Message";
+import ProductCarousel from "../components/ProductCarousel";
 
 const HomeScreen = ({ match }) => {
   // const [products, setProducts] = useState([]);
@@ -29,6 +30,7 @@ const HomeScreen = ({ match }) => {
 
   return (
     <>
+      {!keyword && <ProductCarousel />}
       <h1>Latest Products</h1>
       {loading ? (
         <Loader>Loading...</Loader>
